@@ -25,8 +25,8 @@ This project is a Python program designed to perform various operations on Finit
 
 1. **Clone the Repository**:
    ```bash
-   git clone <repository-url>
-   cd <repository-folder>
+   git clone git@github.com:SilverBtc/Automata-Manager.git
+   cd Automata-Manager
 
 2. **Prepare Input Files**:
 
@@ -54,7 +54,7 @@ The input file must follow this structure:
 3. Line 3: Number of initial states, followed by their labels.
 4. Line 4: Number of final states, followed by their labels.
 5. Line 5: Number of transitions.
-6. Subsequent Lines: Transitions in the format <source><symbol><target>.
+6. Subsequent Lines: Transitions in the format.
 
 Example (`fa_1.txt`):
 ```
