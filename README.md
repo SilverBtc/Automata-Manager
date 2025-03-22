@@ -109,9 +109,11 @@ Example (`fa_1.txt`):
     - Choose option 11 to exit the program.
 
 ## Code Structure
-`main.py`: The main script that runs the program and provides the user interface.
+`main.py`: The main script that runs the program and provides the graphic user interface.
 
 `FiniteAutomaton` class: Represents the FA and contains methods for operations like standardization, determinization, minimization, etc.
+
+`cli` : The secondary script without graphic interface (outputs directly in the console) / Mostly for debugging or when the graphical pilots package doesn't work.
 
 Input files: `.txt` files containing the FA definitions.
 
