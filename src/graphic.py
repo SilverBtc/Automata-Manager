@@ -93,7 +93,7 @@ class AutomataGUI(ctk.CTk):
             "Standardize": standardize,
             "Determinize": determinize,
             "Minimize": lambda fa: minimize or "Minimized Successfully",
-            "Complete": complete,
+            # "Complete": complete,
             "Recognize Word": self.recognize_word_gui,
             "Determinize & Complete": determinize_and_complete,
         }
@@ -125,7 +125,7 @@ class AutomataGUI(ctk.CTk):
             elif func == minimize:
                 new_fa = func(self.current_fa)
                 self.display_automata(new_fa, None)
-            elif func == complete:
+            elif func == determinize_and_complete:
                 new_fa = func(self.current_fa)
                 self.display_automata(new_fa, None)
             elif func == self.recognize_word_gui:
