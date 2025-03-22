@@ -94,7 +94,7 @@ class AutomataGUI(ctk.CTk):
             "Determinize": determinize,
             "Minimize": lambda fa: minimize or "Minimized Successfully",
             "Complete": complete,
-            "Recognize Word": recognize_word,
+            "Recognize Word": self.recognize_word_gui,
             "Determinize & Complete": determinize_and_complete,
         }
 
@@ -128,13 +128,15 @@ class AutomataGUI(ctk.CTk):
             elif func == complete:
                 new_fa = func(self.current_fa)
                 self.display_automata(new_fa, None)
+            elif func == self.recognize_word_gui:
+                func()
             else:
                 result = func(self.current_fa)
                 print(result)
                 self.display_result(func.__name__, str(result))  # Ensure output is string formatted
         except Exception as e:
             messagebox.showerror("Error", f"Function execution failed: {e}")
-            
+
     def display_automata(self, fa, msg):
         self.clear_menu_buttons()
         self.label = ctk.CTkLabel(self, text="Standardized Automaton:", font=("Arial", 18))
@@ -191,7 +193,7 @@ class AutomataGUI(ctk.CTk):
         
         ctk.CTkButton(self, text="Back to Menu", command=self.display_functions, width=200).pack(pady=10)
         ctk.CTkButton(self, text="Exit", command=self.quit, fg_color="red", width=200).pack(pady=10)
-            
+
     def display_result(self, function_name, result):
         self.clear_menu_buttons()
         self.label = ctk.CTkLabel(self, text=f"{function_name} Result:", font=("Arial", 18))
@@ -236,6 +238,28 @@ class AutomataGUI(ctk.CTk):
 
         ctk.CTkButton(self, text="Back to Menu", command=self.display_functions, width=200).pack(pady=10)
         ctk.CTkButton(self, text="Exit", command=self.quit, fg_color="red", width=200).pack(pady=10)
+
+    def recognize_word_gui(self):
+        self.clear_menu_buttons()
+        self.label = ctk.CTkLabel(self, text="Enter a word to recognize:", font=("Arial", 18))
+        self.label.pack(pady=10)
+
+        self.word_entry = ctk.CTkEntry(self, placeholder_text="Enter word", width=200)
+        self.word_entry.pack(pady=5)
+
+        self.recognize_button = ctk.CTkButton(self, text="Recognize", command=self.recognize_word_action, width=150)
+        self.recognize_button.pack(pady=10)
+
+        self.back_button = ctk.CTkButton(self, text="Back to Menu", command=self.display_functions, width=150)
+        self.back_button.pack(pady=10)
+
+    def recognize_word_action(self):
+        word = self.word_entry.get()
+        if recognize_word(self.current_fa, word):
+            result = f"Word '{word}' is accepted."
+        else:
+            result = f"Word '{word}' is rejected."
+        self.display_result("Recognize Word", result)
 
 if __name__ == "__main__":
     app = AutomataGUI()
