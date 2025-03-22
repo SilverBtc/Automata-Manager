@@ -38,16 +38,7 @@ def read_automaton(filename):
             raise ValueError(f"Invalid transition line: {line}")
         source = int(line[:i])
         symbol = line[i]
-        
-        # Find the start of the target state number
-        j = i + 1
-        while j < len(line) and not line[j].isdigit():
-            j += 1
-        
-        if j >= len(line):
-            raise ValueError(f"Invalid transition line format: {line}")
-            
-        target = int(line[j:])
+        target = int(line[i+1:])
         fa.add_transition(source, symbol, target)
 
     return fa

@@ -232,9 +232,10 @@ class AutomataGUI(ctk.CTk):
         for state in sorted(fa.states):
             for symbol in sorted(fa.alphabet):
                 next_states = fa.get_transitions(state, symbol)
-                for next_state in sorted(next_states):
-                    transition_text = f"{state} -> {symbol} -> {next_state}"
-                    ctk.CTkLabel(self, text=transition_text).pack(pady=2)
+                if next_states:
+                    for next_state in sorted(next_states):
+                        transition_text = f"{state} -> {symbol} -> {next_state}"
+                        ctk.CTkLabel(self, text=transition_text).pack(pady=2)
 
         ctk.CTkButton(self, text="Back to Menu", command=self.display_functions, width=200).pack(pady=10)
         ctk.CTkButton(self, text="Exit", command=self.quit, fg_color="red", width=200).pack(pady=10)
