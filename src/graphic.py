@@ -31,7 +31,7 @@ class AutomataGUI(ctk.CTk):
 
         # Load and display logo (maintaining aspect ratio)
         self.logo = Image.open("assets/LOGO.png")
-        self.logo = self.logo.resize((250, 120))  # Resize while maintaining aspect ratio
+        self.logo = self.logo.resize((250, 180))  # Resize while maintaining aspect ratio
         self.logo_image = ImageTk.PhotoImage(self.logo)
         self.logo_label = ctk.CTkLabel(self, image=self.logo_image, text="")
         self.logo_label.pack(pady=20)
