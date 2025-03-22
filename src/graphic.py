@@ -26,12 +26,12 @@ class AutomataGUI(ctk.CTk):
 
         # Load and display background image
         self.background_image = ImageTk.PhotoImage(Image.open("assets/background.png"))
-        self.background_label = ctk.CTkLabel(self, image=self.background_image)
+        self.background_label = ctk.CTkLabel(self, image=self.background_image, text="")
         self.background_label.place(relwidth=1, relheight=1)
 
         # Load and display logo (maintaining aspect ratio)
         self.logo = Image.open("assets/LOGO.png")
-        self.logo = self.logo.resize((250, 120))  # Resize while maintaining aspect ratio
+        self.logo = self.logo.resize((250, 180))  # Resize while maintaining aspect ratio
         self.logo_image = ImageTk.PhotoImage(self.logo)
         self.logo_label = ctk.CTkLabel(self, image=self.logo_image, text="")
         self.logo_label.pack(pady=20)
@@ -93,7 +93,7 @@ class AutomataGUI(ctk.CTk):
             "Standardize": standardize,
             "Determinize": determinize,
             "Minimize": lambda fa: minimize or "Minimized Successfully",
-            "Complete": complete,
+            # "Complete": complete,
             "Recognize Word": self.recognize_word_gui,
             "Determinize & Complete": determinize_and_complete,
         }
@@ -125,7 +125,7 @@ class AutomataGUI(ctk.CTk):
             elif func == minimize:
                 new_fa = func(self.current_fa)
                 self.display_automata(new_fa, None)
-            elif func == complete:
+            elif func == determinize_and_complete:
                 new_fa = func(self.current_fa)
                 self.display_automata(new_fa, None)
             elif func == self.recognize_word_gui:
