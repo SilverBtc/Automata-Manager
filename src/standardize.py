@@ -3,6 +3,7 @@ from src.is_standard import is_standard
 
 def standardize(fa):
     is_std, msg = is_standard(fa)
+    print(msg)
     if is_std:
         return fa, "Already standard."
     new_initial = max(fa.states) + 1 if fa.states else 0
@@ -16,6 +17,7 @@ def standardize(fa):
         for sym in fa.transitions[src]:
             for tgt in fa.transitions[src][sym]:
                 new_fa.add_transition(src, sym, tgt)
+    print("aaaa")
     for old_init in fa.initial_states:
         for sym in fa.alphabet:
             tgts = fa.get_transitions(old_init, sym)

@@ -31,7 +31,7 @@ class AutomataGUI(ctk.CTk):
 
         # Load and display logo (maintaining aspect ratio)
         self.logo = Image.open("assets/LOGO.png")
-        self.logo = self.logo.resize((250, 120), Image.ANTIALIAS)  # Resize while maintaining aspect ratio
+        self.logo = self.logo.resize((250, 120))  # Resize while maintaining aspect ratio
         self.logo_image = ImageTk.PhotoImage(self.logo)
         self.logo_label = ctk.CTkLabel(self, image=self.logo_image, text="")
         self.logo_label.pack(pady=20)
@@ -116,11 +116,82 @@ class AutomataGUI(ctk.CTk):
         try:
             if func == self.display_automaton_table:
                 func(self.current_fa)
+            elif func == standardize:
+                new_fa, msg = func(self.current_fa)
+                self.display_automata(new_fa, msg)
+            elif func == determinize:
+                new_fa = func(self.current_fa)
+                self.display_automata(new_fa, None)
+            elif func == minimize:
+                new_fa = func(self.current_fa)
+                self.display_automata(new_fa, None)
+            elif func == complete:
+                new_fa = func(self.current_fa)
+                self.display_automata(new_fa, None)
             else:
                 result = func(self.current_fa)
+                print(result)
                 self.display_result(func.__name__, str(result))  # Ensure output is string formatted
         except Exception as e:
             messagebox.showerror("Error", f"Function execution failed: {e}")
+            
+    def display_automata(self, fa, msg):
+        self.clear_menu_buttons()
+        self.label = ctk.CTkLabel(self, text="Standardized Automaton:", font=("Arial", 18))
+        self.label.pack(pady=20)
+        
+        # Create text box to display the automaton
+        result_text = ctk.CTkTextbox(self, height=400, width=700)
+        result_text.pack(pady=10, padx=20)
+        
+        # Format the automaton details as text
+        text = "Finite Automaton Details:\n"
+        if msg: text += f"Message : {msg}"
+        text += f"Alphabet: {sorted(fa.alphabet)}\n"
+        text += f"States: {sorted(fa.states)}\n"
+        text += f"Initial states: {sorted(fa.initial_states)}\n"
+        text += f"Final states: {sorted(fa.final_states)}\n\n"
+        text += "Transition Table:\n"
+        
+        symbols = sorted(fa.alphabet)
+        state_col_width = 12
+        symbol_col_width = 5
+        
+        # Create header with proper spacing
+        header = "   State   ".ljust(state_col_width) + "| " + " | ".join(s.center(symbol_col_width) for s in symbols)
+        text += header + "\n"
+        text += '-' * len(header) + "\n"
+        
+        for state in sorted(fa.states):
+            # Format state representation
+            state_str = []
+            if state in fa.initial_states:
+                state_str.append("->")
+            if state in fa.final_states:
+                state_str.append('<-')
+            if not (state in fa.initial_states or state in fa.final_states):
+                state_str.append("  ")
+            state_str.append(" " + str(state))
+            state_str = ''.join(state_str).ljust(state_col_width)
+            
+            # Format transitions for each symbol
+            transitions = []
+            for symbol in symbols:
+                targets = fa.get_transitions(state, symbol)
+                if targets:
+                    transitions.append(','.join(map(str, sorted(targets))).center(symbol_col_width))
+                else:
+                    transitions.append('-'.center(symbol_col_width))
+            
+            # Add the row to text
+            text += state_str + "| " + " | ".join(transitions) + "\n"
+        
+        result_text.insert("1.0", text)
+        result_text.configure(state="disabled")
+        
+        ctk.CTkButton(self, text="Back to Menu", command=self.display_functions, width=200).pack(pady=10)
+        ctk.CTkButton(self, text="Exit", command=self.quit, fg_color="red", width=200).pack(pady=10)
+            
     def display_result(self, function_name, result):
         self.clear_menu_buttons()
         self.label = ctk.CTkLabel(self, text=f"{function_name} Result:", font=("Arial", 18))
