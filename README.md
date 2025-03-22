@@ -19,7 +19,7 @@ This project is a Python program designed to perform various operations on Finit
 ## Prerequisites
 
 - Python 3.x
-- No additional libraries are required.
+- The module : Pillow, customtkinter, collections are needed.
 
 ## How to Use
 
@@ -117,7 +117,7 @@ Input files: `.txt` files containing the FA definitions.
 
 ## Contributors
 Brian
-Samabadou
+Abdou-Samad
 Rayan
 Léo
 Hector
