@@ -26,7 +26,7 @@ class AutomataGUI(ctk.CTk):
 
         # Load and display background image
         self.background_image = ImageTk.PhotoImage(Image.open("assets/background.png"))
-        self.background_label = ctk.CTkLabel(self, image=self.background_image)
+        self.background_label = ctk.CTkLabel(self, image=self.background_image, text="")
         self.background_label.place(relwidth=1, relheight=1)
 
         # Load and display logo (maintaining aspect ratio)
