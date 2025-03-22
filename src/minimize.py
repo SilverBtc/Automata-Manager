@@ -1,6 +1,7 @@
 from collections import defaultdict
 from FiniteAutomata import FiniteAutomata
 
+
 def minimize(fa):
     # Hopcroft's algorithm (simplified)
     partitions = set()

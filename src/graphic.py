@@ -57,7 +57,7 @@ class AutomataGUI(ctk.CTk):
         if not automaton_number.isdigit() or not (1 <= int(automaton_number) <= 44):
             messagebox.showerror("Error", "Invalid automaton number!")
             return
-        
+
         # Display loading bar
         self.label.configure(text="Loading...")
         progress = ctk.CTkProgressBar(self)
@@ -66,7 +66,7 @@ class AutomataGUI(ctk.CTk):
         self.update()
 
         for i in range(100):
-            time.sleep(0.05)
+            time.sleep(0.01)
             progress.set(i / 100)
             self.update()
 
@@ -86,13 +86,13 @@ class AutomataGUI(ctk.CTk):
         button_frame.pack(pady=20, padx=20, fill='both', expand=True)
 
         functions = {
-            "Display": self.display_automaton_table,  
+            "Display": self.display_automaton_table,
             "Is Deterministic": is_deterministic,
             "Is Complete": is_complete,
             "Is Standard": is_standard,
             "Standardize": standardize,
             "Determinize": determinize,
-            "Minimize": lambda fa: minimize(fa) or "Minimized Successfully",
+            "Minimize": lambda fa: minimize or "Minimized Successfully",
             "Complete": complete,
             "Recognize Word": recognize_word,
             "Determinize & Complete": determinize_and_complete,
@@ -114,14 +114,13 @@ class AutomataGUI(ctk.CTk):
             return
 
         try:
-            result = func(self.current_fa) if func != self.display_automaton_table else func()  
             if func == self.display_automaton_table:
-                self.display_automaton_table(self.current_fa)
+                func(self.current_fa)
             else:
+                result = func(self.current_fa)
                 self.display_result(func.__name__, str(result))  # Ensure output is string formatted
         except Exception as e:
             messagebox.showerror("Error", f"Function execution failed: {e}")
-
     def display_result(self, function_name, result):
         self.clear_menu_buttons()
         self.label = ctk.CTkLabel(self, text=f"{function_name} Result:", font=("Arial", 18))
@@ -137,26 +136,32 @@ class AutomataGUI(ctk.CTk):
 
     def display_automaton_table(self, fa):
         self.clear_menu_buttons()
-        self.label = ctk.CTkLabel(self, text="Automaton Table:", font=("Arial", 18))
+        self.label = ctk.CTkLabel(self, text="Automaton Details:", font=("Arial", 18))
         self.label.pack(pady=20)
 
-        table_frame = ctk.CTkFrame(self)
-        table_frame.pack(pady=10)
+        # Display automaton details
+        details = [
+            f"Number of symbols: {len(fa.alphabet)}",
+            f"Alphabet: A = {{{', '.join(map(str, sorted(fa.alphabet)))}}}",
+            f"Number of states: {len(fa.states)}",
+            f"Initial state: {', '.join(map(str, sorted(fa.initial_states)))}",
+            f"Final states: {', '.join(map(str, sorted(fa.final_states)))}",
+            f"Number of transitions: {sum(len(targets) for state in fa.states for targets in fa.transitions[state].values())}"
+        ]
 
-        headers = ["State", "Symbol", "Next State"]
-        for col, header in enumerate(headers):
-            ctk.CTkLabel(table_frame, text=header).grid(row=0, column=col, padx=10, pady=5)
+        for detail in details:
+            ctk.CTkLabel(self, text=detail).pack(pady=5)
 
-        row = 1
-        for state in fa.states:
-            for symbol in fa.alphabet:
+        # Display transitions
+        transition_label = ctk.CTkLabel(self, text="Transitions:", font=("Arial", 18))
+        transition_label.pack(pady=10)
+
+        for state in sorted(fa.states):
+            for symbol in sorted(fa.alphabet):
                 next_states = fa.get_transitions(state, symbol)
-                if next_states:
-                    for next_state in next_states:
-                        ctk.CTkLabel(table_frame, text=str(state)).grid(row=row, column=0, padx=10, pady=5)
-                        ctk.CTkLabel(table_frame, text=symbol).grid(row=row, column=1, padx=10, pady=5)
-                        ctk.CTkLabel(table_frame, text=str(next_state)).grid(row=row, column=2, padx=10, pady=5)
-                        row += 1
+                for next_state in sorted(next_states):
+                    transition_text = f"{state} -> {symbol} -> {next_state}"
+                    ctk.CTkLabel(self, text=transition_text).pack(pady=2)
 
         ctk.CTkButton(self, text="Back to Menu", command=self.display_functions, width=200).pack(pady=10)
         ctk.CTkButton(self, text="Exit", command=self.quit, fg_color="red", width=200).pack(pady=10)
