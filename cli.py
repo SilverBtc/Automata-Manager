@@ -104,7 +104,7 @@ def main():
             if current_fa:
                 word = input("Enter word (or 'end' to stop): ")
                 while word != 'end':
-                    if recognize_word(word, current_fa):
+                    if recognize_word(current_fa, word):
                         print(f"'{word}' is accepted.")
                     else:
                         print(f"'{word}' is rejected.")
